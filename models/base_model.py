@@ -6,8 +6,8 @@ for other classes
 
 """
 
-from models.__init__ import storage
 from datetime import datetime
+from models import storage
 from uuid import uuid4
 
 

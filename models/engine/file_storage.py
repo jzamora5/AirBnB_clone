@@ -14,18 +14,21 @@ class FileStorage:
 
     def all(self):
         """ Returns the dictionary __objects """
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """ Sets in __objects the obj key <obj class name>.id """
         obj_id = obj.__class__.__name__ + '.' + obj.id
-        self.__objects[obj_id] = obj.to_dict()
+        FileStorage.__objects[obj_id] = obj
 
     def save(self):
         """ serializes __objects to the JSON file (path: __file_path) """
-        jst = json.dumps(self.__objects)
+        jdic = {}
+
+        for key, value in FileStorage.__objects.items():
+            jdic[key] = value.to_dict()
         with open(self.__file_path, "w", encoding="utf-8") as myfile:
-            myfile.write(jst)
+            json.dump(jdic, myfile)
 
     def reload(self):
         """
@@ -34,10 +37,12 @@ class FileStorage:
         doesn’t exist, no exception should be raised)
         """
         try:
-            with open(self.__file_path, encoding="utf-8") as myfile:
-                rd = myfile.read()
-                if not rd or len(rd) == 0:
-                    return None
-                self.__objects = json.loads(rd)
+            with open(FileStorage.__file_path, encoding="utf-8") as myfile:
+                from models.base_model import BaseModel
+                pobj = json.load(myfile)
+                for key, value in pobj.items():
+                    clas = value["__class__"]
+                    obj = eval(clas + "(**value)")
+                    FileStorage.__objects[key] = obj
         except IOError:
             pass

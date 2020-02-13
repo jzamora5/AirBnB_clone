@@ -6,6 +6,7 @@ for other classes
 
 """
 
+from models.__init__ import storage
 from datetime import datetime
 from uuid import uuid4
 
@@ -13,10 +14,6 @@ from uuid import uuid4
 class BaseModel:
 
     """ BaseModel Class definition """
-
-    id = '0'
-    created_at = "0-0-0T0:0:0.0"
-    updated_at = "0-0-0T0:0:0.0"
 
     def __init__(self, *args, **kwargs):
         """ Constructor """
@@ -39,6 +36,9 @@ class BaseModel:
         if "updated_at" not in kwargs.keys():
             self.updated_at = datetime.now()
 
+        if len(kwargs) == 0:
+            storage.new(self)
+
     def __str__(self):
         """ Defines what should be printed for each instance of the class """
         st = "[{:s}] ({:s}) {:s}"
@@ -50,6 +50,7 @@ class BaseModel:
         Update the Public Instance Attr updated_at with the current datetime
         """
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """

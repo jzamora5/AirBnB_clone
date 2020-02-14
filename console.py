@@ -128,6 +128,7 @@ class HBNBCommand(cmd.Cmd):
         if "\"" in arg:
             quote_argv = arg.split("\"")
             cmd_argv = quote_argv[0].split()
+            cmd_argv.append("")
             value = quote_argv[1]
         else:
             cmd_argv = arg.split()

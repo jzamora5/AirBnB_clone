@@ -39,6 +39,12 @@ class FileStorage:
         try:
             with open(FileStorage.__file_path, encoding="utf-8") as myfile:
                 from models.base_model import BaseModel
+                from models.user import User
+                from models.city import City
+                from models.amenity import Amenity
+                from models.place import Place
+                from models.review import Review
+
                 pobj = json.load(myfile)
                 for key, value in pobj.items():
                     clas = value["__class__"]

@@ -4,6 +4,7 @@
 """ AirBnB Console """
 
 from models.base_model import BaseModel
+from models.user import User
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
@@ -76,22 +77,23 @@ class HBNBCommand(cmd.Cmd):
         "Print all the instances saved in file.json"
         cmd_argv = arg.split()
 
-        try:
-            eval(cmd_argv[0])
-        except:
-            print("** class doesn't exist **")
-            return None
+        if cmd_argv:
+            try:
+                eval(cmd_argv[0])
+            except:
+                print("** class doesn't exist **")
+                return None
 
         all_objs = storage.all()
 
         for key, value in all_objs.items():
-            if not cmd_argv[0]:
+            if not cmd_argv:
                 print(value)
             else:
                 check = key.split('.')
                 if cmd_argv[0] == check[0]:
                     print(value)
-                    
+
     def do_destroy(self, arg):
         "Deletes an instance based on it's ID and save the changes\n \
         Usage: destroy <class name> <id>"
@@ -130,25 +132,43 @@ class HBNBCommand(cmd.Cmd):
         else:
             cmd_argv = arg.split()
             if len(cmd_argv) >= 4:
-                value = cmd_argv[4]
+                value = cmd_argv[3]
 
         all_objs = storage.all()
-        key = cmd_argv[0] + '.' + cmd_argv[1]
-        attr = cmd_argv[2]
-        id_exist = 0
-
         if (len(cmd_argv) == 0):
             print("** class name missing **")
-        else:
-            try:
-                env(cmd_argv[1])
-                if (cmd_argv[2]):
-                    if (all_objs.get(key, 0) == 0):
-                        print("** no instance found **")
+            return None
+
+        try:
+            eval(cmd_argv[0])
+        except:
+            print("** class doesn't exist **")
+            return None
+
+        if len(cmd_argv) < 2:
+            print("** instance id missing **")
+            return None
+
+        key = cmd_argv[0] + '.' + cmd_argv[1]
+
+        all_objs = storage.all()
+
+        key = cmd_argv[0] + '.' + cmd_argv[1]
+
+        if all_objs.get(key, False):
+            if (len(cmd_argv) >= 3):
+                if len(cmd_argv) >= 4:
+                    attr = cmd_argv[2]
+                    type_att = getattr(all_objs[key], cmd_argv[2], "")
+                    cast_val = type(type_att)(value)
+                    setattr(all_objs[key], cmd_argv[2], cast_val);
                 else:
-                    print("** instance id missing **")
-            except:
-                print("** class doesn't exist **")
+                    print("** value missing **")
+            else:
+                print("** attribute name missing **")
+        else:
+            print("** no instance found **")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

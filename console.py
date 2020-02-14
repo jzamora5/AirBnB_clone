@@ -25,6 +25,7 @@ class HBNBCommand(cmd.Cmd):
         else:
             try:
                 my_model = eval(arg + "()")
+                my_model.save()
                 print(my_model.id)
             except:
                 print("** class doesn't exist **")
@@ -36,8 +37,54 @@ class HBNBCommand(cmd.Cmd):
         else:
             try:
                 eval(argv[0])
+                try:
+                    all_objs = storage.all()
+                    flag = 0
+                    for obj_id in all_objs:
+                        split_key = obj_id.split('.')
+                        if (split_key[1] == argv[1]):
+                            print(all_objs[obj_id])
+                            flag = 1
+                    if (flag == 0):
+                        print("** no instance found **")
+                except:
+                    print("** instance id missing **")
             except:
                 print("** class doesn't exist **")
+
+    def do_all(self, arg):
+        try:
+            eval(arg)
+            all_objs = storage.all()
+            for obj_id in all_objs.keys():
+                obj = all_objs[obj_id]
+                print(obj)
+        except:
+            print("** class doesn't exist **")
+
+    def do_destroy(self, arg):
+        argv = arg.split()
+        if (len(argv) == 0):
+            print("** class name missing **")
+        else:
+            try:
+                eval(argv[0])
+                try:
+                    all_objs = storage.all()
+                    flag = 0
+                    for obj_id in all_objs:
+                        split_key = obj_id.split('.')
+                        if (split_key[1] == argv[1]):
+                            print(all_objs[obj_id])
+                            flag = 1
+                    if (flag == 0):
+                        print("** no instance found **")
+                except Exception as e:
+                    print(str(e))
+                    print("** instance id missing **")
+            except:
+                print("** class doesn't exist **")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

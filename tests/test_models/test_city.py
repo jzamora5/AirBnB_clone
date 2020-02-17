@@ -15,6 +15,13 @@ class Test_instanceCity(unittest.TestCase):
 
     """ Class for unittest of instance check """
 
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+
     def test_instance(self):
         """ Checks if user is instance of base_model """
         b = City()
@@ -35,6 +42,13 @@ class Test_instanceCity(unittest.TestCase):
 class Test_class_attrsCity(unittest.TestCase):
 
     """ Class for checking if classa attr were set correctly """
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
 
     def test_correct_classattr(self):
         """ Checks if class attr are present """
@@ -66,6 +80,13 @@ class Test_initCity(unittest.TestCase):
     def setUp(self):
         """ Set up for all methods """
         pass
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
 
     def test_instance_creation_no_arg(self):
         """ No arguments """
@@ -180,6 +201,13 @@ class Test_str__City(unittest.TestCase):
 
     """ Class for testing __str__ method """
 
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+
     def test_print(self):
         """ Tests the __str__ method """
         b1 = City()
@@ -234,6 +262,13 @@ class Test_saveCity(unittest.TestCase):
 
     """ Class to test save method """
 
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+
     def test_save(self):
         """ Tests that update_at time is updated """
 
@@ -255,6 +290,13 @@ class Test_saveCity(unittest.TestCase):
 class Test_to_dictCity(unittest.TestCase):
 
     """ Class to test to_dict method """
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
 
     def test_to_dict(self):
         """ Checks for correct dictionary conversion """

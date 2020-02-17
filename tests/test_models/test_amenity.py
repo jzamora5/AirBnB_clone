@@ -15,6 +15,13 @@ class Test_instanceState(unittest.TestCase):
 
     """ Class for unittest of instance check """
 
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+
     def test_instance(self):
         """ Checks if user is instance of base_model """
         b = Amenity()
@@ -35,6 +42,13 @@ class Test_instanceState(unittest.TestCase):
 class Test_class_attrsAmenity(unittest.TestCase):
 
     """ Class for checking if classa attr were set correctly """
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
 
     def test_correct_classattr(self):
         """ Checks if class attr are present """
@@ -66,6 +80,13 @@ class Test_initAmenity(unittest.TestCase):
     def setUp(self):
         """ Set up for all methods """
         pass
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
 
     def test_instance_creation_no_arg(self):
         """ No arguments """
@@ -180,6 +201,13 @@ class Test_str__Amenity(unittest.TestCase):
 
     """ Class for testing __str__ method """
 
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+
     def test_print(self):
         """ Tests the __str__ method """
         b1 = Amenity()
@@ -234,6 +262,13 @@ class Test_saveAmenity(unittest.TestCase):
 
     """ Class to test save method """
 
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+
     def test_save(self):
         """ Tests that update_at time is updated """
 
@@ -255,6 +290,13 @@ class Test_saveAmenity(unittest.TestCase):
 class Test_to_dictAmenity(unittest.TestCase):
 
     """ Class to test to_dict method """
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
 
     def test_to_dict(self):
         """ Checks for correct dictionary conversion """

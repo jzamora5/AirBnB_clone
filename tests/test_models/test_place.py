@@ -15,6 +15,13 @@ class Test_instancePlace(unittest.TestCase):
 
     """ Class for unittest of instance check """
 
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+
     def test_instance(self):
         """ Checks if user is instance of base_model """
         b = Place()
@@ -35,6 +42,13 @@ class Test_instancePlace(unittest.TestCase):
 class Test_class_attrsPlace(unittest.TestCase):
 
     """ Class for checking if classa attr were set correctly """
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
 
     def test_correct_classattr(self):
         """ Checks if class attr are present """
@@ -87,6 +101,13 @@ class Test_initPlace(unittest.TestCase):
     def setUp(self):
         """ Set up for all methods """
         pass
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
 
     def test_instance_creation_no_arg(self):
         """ No arguments """
@@ -201,6 +222,13 @@ class Test_str__Place(unittest.TestCase):
 
     """ Class for testing __str__ method """
 
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+
     def test_print(self):
         """ Tests the __str__ method """
         b1 = Place()
@@ -276,6 +304,13 @@ class Test_savePlace(unittest.TestCase):
 class Test_to_dictPlace(unittest.TestCase):
 
     """ Class to test to_dict method """
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
 
     def test_to_dict(self):
         """ Checks for correct dictionary conversion """

@@ -17,6 +17,13 @@ class Test_init(unittest.TestCase):
         """ Set up for all methods """
         pass
 
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+
     def test_instance_creation_no_arg(self):
         """ No arguments """
         b1 = BaseModel()
@@ -130,6 +137,13 @@ class Test_str__(unittest.TestCase):
 
     """ Class for testing __str__ method """
 
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+
     def test_print(self):
         """ Tests the __str__ method """
         b1 = BaseModel()
@@ -184,6 +198,13 @@ class Test_save(unittest.TestCase):
 
     """ Class to test save method """
 
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+
     def test_save(self):
         """ Tests that update_at time is updated """
 
@@ -205,6 +226,13 @@ class Test_save(unittest.TestCase):
 class Test_to_dict(unittest.TestCase):
 
     """ Class to test to_dict method """
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
 
     def test_to_dict(self):
         """ Checks for correct dictionary conversion """

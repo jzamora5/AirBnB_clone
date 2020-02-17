@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
-""" Module for serializing and deserializing instances to JSON """
+""" Module for serializing and deserializing instances to JSON and keeping
+storage of instances
+"""
 
 import json
 
@@ -24,7 +26,7 @@ class FileStorage:
     def save(self):
         """ serializes __objects to the JSON file (path: __file_path) """
         jdic = {}
-
+ 
         for key, value in FileStorage.__objects.items():
             jdic[key] = value.to_dict()
         with open(self.__file_path, "w", encoding="utf-8") as myfile:

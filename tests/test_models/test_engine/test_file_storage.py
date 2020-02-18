@@ -91,6 +91,7 @@ class Test_all(unittest.TestCase):
         self.assertEqual(storage.all(), dic)
 
     def test_all_class(self):
+        """ Test with all classes """
         b = BaseModel()
         u = User()
         c = City()

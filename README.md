@@ -6,8 +6,8 @@ This project is the first step towards building a full web application: the **Ai
 It is very important because it serves as the back-end base of other projects: 
 HTML/CSS templating, database storage, API, front-end integration…
 
-![AirBnB Logo](https://holbertonintranet.s3.amazonaws.com/uploads/medias/2018/6/65f4a1dd9c51265f49d0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDDGGGOUZGDONYM4/20200218/us-east-1/s3/aws4_request&X-Amz-Date=20200218T130027Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=594c3a1eada81776325d0e8cd984a567f3be19e2ef733b9659caf4c6f40b8583)
-![enter image description here](https://www.holbertonschool.com/holberton-logo.png)
+![AirBnB Logo](https://www.pngitem.com/pimgs/m/132-1322125_transparent-background-airbnb-logo-hd-png-download.png)
+![Holberton Logo](https://www.holbertonschool.com/holberton-logo.png)
 
 
 # Synopsis
@@ -249,5 +249,6 @@ Ubuntu 14.04, Emacs, and Python3 language.
 
 ## Authors
 
-Jhoan Stiven Zamora Caicedo | Github: [jzamora5](https://github.com/jzamora5)
+Jhoan Stiven Zamora Caicedo | Github: [jzamora5](https://github.com/jzamora5) 
+
 Jose David Caro Cantor | Github: [josecaro02](https://github.com/josecaro02)

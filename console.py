@@ -15,6 +15,7 @@ import cmd
 
 
 class HBNBCommand(cmd.Cmd):
+    """ Class HBNB to read command """
     prompt = '(hbnb) '
     __all_117 = 0
 
@@ -40,6 +41,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, arg):
         'EOF command to exit the program'
+        print()
         return True
 
     def do_create(self, arg):
@@ -244,8 +246,4 @@ class HBNBCommand(cmd.Cmd):
 
 
 if __name__ == '__main__':
-    import sys
-    if len(sys.argv) > 1:
-        HBNBCommand().onecmd('Message'.join(sys.argv[1:]))
-    else:
-        HBNBCommand().cmdloop()
+    HBNBCommand().cmdloop()

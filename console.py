@@ -15,6 +15,7 @@ import cmd
 
 
 class HBNBCommand(cmd.Cmd):
+    """ Class HBNB to read command """
     prompt = '(hbnb) '
     __all_117 = 0
 

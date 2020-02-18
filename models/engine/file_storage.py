@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 """ Module for serializing and deserializing instances to JSON and keeping
 storage of instances

@@ -24,6 +24,8 @@ class HBNBCommand(cmd.Cmd):
 
     def precmd(self, line):
         """ Edit given command to allow second type of input"""
+        if not sys.stdin.isatty():
+            print()
         if '.' in line:
             HBNBCommand.__all_117 = 1
             line = line.replace('.', ' ').replace('(', ' ').replace(')', ' ')
@@ -38,6 +40,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, arg):
         'EOF command to exit the program'
+        print()
         return True
 
     def do_create(self, arg):
@@ -242,8 +245,4 @@ class HBNBCommand(cmd.Cmd):
 
 
 if __name__ == '__main__':
-    import sys
-    if len(sys.argv) > 1:
-        HBNBCommand().onecmd('Message'.join(sys.argv[1:]))
-    else:
-        HBNBCommand().cmdloop()
+    HBNBCommand().cmdloop()

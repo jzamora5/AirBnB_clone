@@ -251,6 +251,19 @@ class Test_save(unittest.TestCase):
             self.assertEqual(b.id, pobj[key]["id"])
             self.assertEqual(b.__class__.__name__, pobj[key]["__class__"])
 
+    def test_save_base_no_dic(self):
+        """ Save method with base model no kwarg """
+        b = BaseModel()
+        key = b.__class__.__name__ + '.' + b.id
+        fname = "file.json"
+        self.assertFalse(path.isfile(fname))
+        storage.save()
+        self.assertTrue(path.isfile(fname))
+        with open(fname, encoding="utf-8") as myfile:
+            pobj = json.load(myfile)
+            self.assertEqual(b.id, pobj[key]["id"])
+            self.assertEqual(b.__class__.__name__, pobj[key]["__class__"])
+
     def test_save_user(self):
         """ Save method with user """
         dic = {"id": "123"}

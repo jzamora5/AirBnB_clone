@@ -157,7 +157,6 @@ class HBNBCommand(cmd.Cmd):
                         for j in i.split(": "):
                             cmd_argv.append(j.replace("\"", "")\
                                             .replace('\'', ""))
-                    print(cmd_argv)
                 else:
                     arg_key = arg.replace(",", "")
                     part1_argv = arg_key.split()

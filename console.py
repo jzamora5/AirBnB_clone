@@ -19,9 +19,11 @@ class HBNBCommand(cmd.Cmd):
     __all_117 = 0
 
     def emptyline(self):
+        """Pass if no command is given"""
         pass
 
     def precmd(self, line):
+        """ Edit given command to allow second type of input"""
         if not sys.stdin.isatty():
             print()
         if '.' in line:

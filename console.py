@@ -14,7 +14,6 @@ from models import storage
 import cmd
 
 
-
 class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
     __all_117 = 0
@@ -139,9 +138,8 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** no instance found **")
 
-
     def do_update(self, arg):
-        "Usage: update <class name> <id> <attribute name> \"<attribute value>\""
+        "Usage: update <class name> <id> <attribute name> <attribute value>"
         cmd_argv = []
         part2_argv = []
         is_dict = 0
@@ -155,7 +153,7 @@ class HBNBCommand(cmd.Cmd):
                     part2_argv = arg.replace("}", "").split("{")[1].split(", ")
                     for i in part2_argv:
                         for j in i.split(": "):
-                            cmd_argv.append(j.replace("\"", "")\
+                            cmd_argv.append(j.replace("\"", "")
                                             .replace('\'', ""))
                 else:
                     arg_key = arg.replace(",", "")
@@ -201,14 +199,14 @@ class HBNBCommand(cmd.Cmd):
         if all_objs.get(key, False):
             if (len(cmd_argv) >= 3):
                 if (len(cmd_argv) % 2) == 0:
-                    for i in range(2,len(cmd_argv), 2):
+                    for i in range(2, len(cmd_argv), 2):
                         attr = cmd_argv[i]
                         type_att = getattr(all_objs[key], cmd_argv[i], "")
                         try:
                             cast_val = type(type_att)(cmd_argv[i + 1])
                         except:
                             cast_val = type_att
-                        setattr(all_objs[key], cmd_argv[i], cast_val);
+                        setattr(all_objs[key], cmd_argv[i], cast_val)
                         all_objs[key].save()
                         if is_dict == 0:
                             break

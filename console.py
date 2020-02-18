@@ -16,12 +16,14 @@ import cmd
 
 class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
+    __all_117 = 0
 
     def emptyline(self):
         pass
 
     def precmd(self, line):
         if '.' in line:
+            HBNBCommand.__all_117 = 1
             line = line.replace('.', ' ').replace('(', ' ').replace(')', ' ')
             cmd_argv = line.split()
             cmd_argv[0], cmd_argv[1] = cmd_argv[1], cmd_argv[0]
@@ -66,6 +68,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** instance id missing **")
                 return None
 
+        cmd_argv[1] = cmd_argv[1].replace("\"", "")
         key = cmd_argv[0] + '.' + cmd_argv[1]
 
         if all_objs.get(key, False):
@@ -85,14 +88,24 @@ class HBNBCommand(cmd.Cmd):
                 return None
 
         all_objs = storage.all()
-
+        print_list = []
+        len_objs = len(all_objs)
         for key, value in all_objs.items():
             if not cmd_argv:
-                print(value)
+                if HBNBCommand.__all_117 == 0:
+                    print_list.append("\"" + str(value) + "\"")
+                else:
+                    print_list.append(str(value))
             else:
                 check = key.split('.')
                 if cmd_argv[0] == check[0]:
-                    print(value)
+                    if HBNBCommand.__all_117 == 0:
+                        print_list.append("\"" + str(value) + "\"")
+                    else:
+                        print_list.append(str(value))
+        print("[", end="")
+        print(", ".join(print_list), end="")
+        print("]")
 
     def do_destroy(self, arg):
         "Deletes an instance based on it's ID and save the changes\n \
@@ -114,6 +127,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** instance id missing **")
                 return None
 
+        cmd_argv[1] = cmd_argv[1].replace("\"", "")
         key = cmd_argv[0] + '.' + cmd_argv[1]
 
         if all_objs.get(key, False):
@@ -125,17 +139,35 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         "Usage: update <class name> <id> <attribute name> \"<attribute value>\""
+        cmd_argv = []
+        part2_argv = []
         if "\"" in arg:
-            quote_argv = arg.split("\"")
-            cmd_argv = quote_argv[0].split()
-            cmd_argv.append("")
-            value = quote_argv[1]
+            if "," in arg:
+                if "{" in arg:
+                    print(arg)
+                    part1_argv = arg.split(",")[0].split()
+                    for i in part1_argv:
+                        cmd_argv.append(i.replace("\"", ""))
+                    part2_argv = arg.replace("}", "").split("{")[1].split(", ")
+                    for i in part2_argv:
+                        for j in i.split(": "):
+                            cmd_argv.append(j.replace("\"", "").replace('\'', ""))
+                else:
+                    arg_key = arg.replace(",", "")
+                    part1_argv = arg_key.split()
+                    for i in part1_argv:
+                        cmd_argv.append(i.replace("\"", ""))
+                    part2_argv = arg.split(", ")[1:]
+                    for i in part2_argv:
+                        cmd_argv.append(i.replace("\"", ""))
+            else:
+                cmd_argv = arg.split("\"")[0].split(" ")[0:2]
+                cmd_argv.append(arg.split("\"")[0].split(" ")[2])
+                cmd_argv.append(arg.split("\"")[1].replace("\"", ""))
         else:
             cmd_argv = arg.split()
-            if len(cmd_argv) >= 4:
-                value = cmd_argv[3]
 
-        all_objs = storage.all()
+        print(cmd_argv)
         if (len(cmd_argv) == 0):
             print("** class name missing **")
             return None
@@ -150,8 +182,6 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return None
 
-        key = cmd_argv[0] + '.' + cmd_argv[1]
-
         all_objs = storage.all()
 
         key = cmd_argv[0] + '.' + cmd_argv[1]
@@ -161,8 +191,9 @@ class HBNBCommand(cmd.Cmd):
                 if len(cmd_argv) >= 4:
                     attr = cmd_argv[2]
                     type_att = getattr(all_objs[key], cmd_argv[2], "")
-                    cast_val = type(type_att)(value)
+                    cast_val = type(type_att)(cmd_argv[3])
                     setattr(all_objs[key], cmd_argv[2], cast_val);
+                    all_objs[key].save()
                 else:
                     print("** value missing **")
             else:
@@ -170,6 +201,33 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** no instance found **")
 
+    def do_count(self, arg):
+        "Usage: count <class name> or <class name>.count()"
+        cmd_argv = arg.split()
+
+        if cmd_argv:
+            try:
+                eval(cmd_argv[0])
+            except:
+                print("** class doesn't exist **")
+                return None
+
+        all_objs = storage.all()
+        count = 0
+
+        for key, value in all_objs.items():
+            if not cmd_argv:
+                count += 1
+            else:
+                check = key.split('.')
+                if cmd_argv[0] == check[0]:
+                    count += 1
+        print(count)
+
 
 if __name__ == '__main__':
-    HBNBCommand().cmdloop()
+    import sys
+    if len(sys.argv) > 1:
+        HBNBCommand().onecmd('Message'.join(sys.argv[1:]))
+    else:
+        HBNBCommand().cmdloop()

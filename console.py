@@ -12,6 +12,7 @@ from models.place import Place
 from models.review import Review
 from models import storage
 import cmd
+import sys
 
 
 class HBNBCommand(cmd.Cmd):

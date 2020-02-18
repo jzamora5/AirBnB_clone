@@ -14,6 +14,7 @@ from models import storage
 import cmd
 
 
+
 class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
     __all_117 = 0
@@ -22,6 +23,8 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def precmd(self, line):
+        if not sys.stdin.isatty():
+            print()
         if '.' in line:
             HBNBCommand.__all_117 = 1
             line = line.replace('.', ' ').replace('(', ' ').replace(')', ' ')
@@ -141,33 +144,44 @@ class HBNBCommand(cmd.Cmd):
         "Usage: update <class name> <id> <attribute name> \"<attribute value>\""
         cmd_argv = []
         part2_argv = []
+        is_dict = 0
         if "\"" in arg:
             if "," in arg:
                 if "{" in arg:
-                    print(arg)
+                    is_dict = 1
                     part1_argv = arg.split(",")[0].split()
                     for i in part1_argv:
                         cmd_argv.append(i.replace("\"", ""))
                     part2_argv = arg.replace("}", "").split("{")[1].split(", ")
                     for i in part2_argv:
                         for j in i.split(": "):
-                            cmd_argv.append(j.replace("\"", "").replace('\'', ""))
+                            cmd_argv.append(j.replace("\"", "")\
+                                            .replace('\'', ""))
+                    print(cmd_argv)
                 else:
                     arg_key = arg.replace(",", "")
                     part1_argv = arg_key.split()
-                    for i in part1_argv:
+                    for i in part1_argv[:2]:
                         cmd_argv.append(i.replace("\"", ""))
                     part2_argv = arg.split(", ")[1:]
                     for i in part2_argv:
                         cmd_argv.append(i.replace("\"", ""))
             else:
-                cmd_argv = arg.split("\"")[0].split(" ")[0:2]
-                cmd_argv.append(arg.split("\"")[0].split(" ")[2])
-                cmd_argv.append(arg.split("\"")[1].replace("\"", ""))
-        else:
-            cmd_argv = arg.split()
+                part1_argv = arg.split("\"")[0]
+                for i in part1_argv.split():
+                    cmd_argv.append(i)
+                part2_argv = arg.split("\"")[1:]
+                for i in part2_argv:
+                    if i != " " and i != "":
+                        cmd_argv.append(i.replace("\"", ""))
 
-        print(cmd_argv)
+        else:
+            part1_argv = arg.split()
+            for i in range(len(part1_argv)):
+                if i == 4:
+                    break
+                cmd_argv.append(part1_argv[i])
+
         if (len(cmd_argv) == 0):
             print("** class name missing **")
             return None
@@ -185,15 +199,20 @@ class HBNBCommand(cmd.Cmd):
         all_objs = storage.all()
 
         key = cmd_argv[0] + '.' + cmd_argv[1]
-
         if all_objs.get(key, False):
             if (len(cmd_argv) >= 3):
-                if len(cmd_argv) >= 4:
-                    attr = cmd_argv[2]
-                    type_att = getattr(all_objs[key], cmd_argv[2], "")
-                    cast_val = type(type_att)(cmd_argv[3])
-                    setattr(all_objs[key], cmd_argv[2], cast_val);
-                    all_objs[key].save()
+                if (len(cmd_argv) % 2) == 0:
+                    for i in range(2,len(cmd_argv), 2):
+                        attr = cmd_argv[i]
+                        type_att = getattr(all_objs[key], cmd_argv[i], "")
+                        try:
+                            cast_val = type(type_att)(cmd_argv[i + 1])
+                        except:
+                            cast_val = type_att
+                        setattr(all_objs[key], cmd_argv[i], cast_val);
+                        all_objs[key].save()
+                        if is_dict == 0:
+                            break
                 else:
                     print("** value missing **")
             else:

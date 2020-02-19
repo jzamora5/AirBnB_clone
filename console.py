@@ -26,8 +26,10 @@ class HBNBCommand(cmd.Cmd):
 
     def precmd(self, line):
         """ Edit given command to allow second type of input"""
+        """
         if not sys.stdin.isatty():
             print()
+        """
         if '.' in line:
             HBNBCommand.__all_117 = 1
             line = line.replace('.', ' ').replace('(', ' ').replace(')', ' ')

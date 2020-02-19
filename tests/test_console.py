@@ -193,6 +193,15 @@ class Test_destroy(unittest.TestCase):
             st = f.getvalue()
             self.assertEqual(msg, st)
 
+    def test_new_destroy_no_class(self):
+        """  Test for destroy with class missing by second method """
+        msg = "** class doesn't exist **\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            pre_cmd = HBNBCommand().precmd("MyModel.destroy()")
+            HBNBCommand().onecmd(pre_cmd)
+            st = f.getvalue()
+            self.assertEqual(msg, st)
+
     def test_destroy_invalid_class(self):
         """  Test for destroy with invalid class """
         msg = "** class doesn't exist **\n"

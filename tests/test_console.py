@@ -681,18 +681,3 @@ class Test_count(unittest.TestCase):
             remove("file.json")
         except:
             pass
-
-    def test_empty_countw(self):
-        """ Tests for empty storage """
-        classes = ["BaseModel", "User", "State", "City",
-                   "Amenity", "Place", "Review"]
-        msg = "[]\n"
-        with patch('sys.stdout', new=io.StringIO()) as f:
-                HBNBCommand().onecmd("all")
-                st = f.getvalue()
-                self.assertEqual(msg, st)
-        for i in classes:
-            with patch('sys.stdout', new=io.StringIO()) as f:
-                HBNBCommand().onecmd("all " + i)
-                st = f.getvalue()
-                self.assertEqual(msg, st)

@@ -293,30 +293,6 @@ class Test_destroy(unittest.TestCase):
                 lencl -= 1
                 self.assertEqual(len(alldic), lencl)
 
-    '''
-    def test_new_destroy_valid_class(self):
-        """  Test for destroy with existing id  """
-        classes = ["BaseModel", "User", "State", "City",
-                   "Amenity", "Place", "Review"]
-        lencl = len(classes)
-        id_cl = []
-        for i in classes:
-            with patch('sys.stdout', new=io.StringIO()) as f:
-                HBNBCommand().onecmd("create " + i)
-                id_st = f.getvalue()
-                id_cl.append(id_st)
-                alldic = storage.all()
-                self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
-        self.assertEqual(len(alldic), lencl)
-        for i, j in zip(classes, id_cl):
-            with patch('sys.stdout', new=io.StringIO()) as f:
-                pre_cmd = HBNBCommand().precmd(i + "destroy(\"" + j + "\")")
-                HBNBCommand().onecmd(pre_cmd)
-                alldic = storage.all()
-                self.assertFalse((i + '.' + id_st[:-1]) in alldic.keys())
-                lencl -= 1
-                self.assertEqual(len(alldic), lencl)
-    '''
 
 class Test_show(unittest.TestCase):
 

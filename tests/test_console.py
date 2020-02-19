@@ -310,6 +310,7 @@ class Test_destroy(unittest.TestCase):
                 lencl -= 1
                 self.assertEqual(len(alldic), lencl)
 
+
 class Test_show(unittest.TestCase):
 
     """ Tests the show commands """

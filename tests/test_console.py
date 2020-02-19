@@ -230,6 +230,18 @@ class Test_destroy(unittest.TestCase):
                 st = f.getvalue()
                 self.assertEqual(msg, st)
 
+    def test_new_destroy_no_id(self):
+        """  Test for destroy with id missing """
+        msg = "** instance id missing **\n"
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                pre_cmd = HBNBCommand().precmd(i + ".destroy()")
+                HBNBCommand().onecmd(pre_cmd)
+                st = f.getvalue()
+                self.assertEqual(msg, st)
+
     def test_destroy_no_existent_id(self):
         """  Test for destroy with non-existent id """
         msg = "** no instance found **\n"
@@ -238,6 +250,18 @@ class Test_destroy(unittest.TestCase):
         for i in classes:
             with patch('sys.stdout', new=io.StringIO()) as f:
                 HBNBCommand().onecmd("destroy " + i + " 123")
+                st = f.getvalue()
+                self.assertEqual(msg, st)
+
+    def test_new_destroy_no_existent_id(self):
+        """  Test for destroy with non-existent id """
+        msg = "** no instance found **\n"
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                pre_cmd = HBNBCommand().precmd(i + ".destroy(123)")
+                HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
                 self.assertEqual(msg, st)
 
@@ -263,6 +287,28 @@ class Test_destroy(unittest.TestCase):
                 lencl -= 1
                 self.assertEqual(len(alldic), lencl)
 
+    def test_new_destroy_valid_class(self):
+        """  Test for destroy with existing id  """
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        lencl = len(classes)
+        id_cl = []
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("create " + i)
+                id_st = f.getvalue()
+                id_cl.append(id_st)
+                alldic = storage.all()
+                self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
+        self.assertEqual(len(alldic), lencl)
+        for i, j in zip(classes, id_cl):
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                pre_cmd = HBNBCommand().precmd(i + "destroy(\"" + j + "\")")
+                HBNBCommand().onecmd("destroy " + i + " " + j)
+                alldic = storage.all()
+                self.assertFalse((i + '.' + id_st[:-1]) in alldic.keys())
+                lencl -= 1
+                self.assertEqual(len(alldic), lencl)
 
 class Test_show(unittest.TestCase):
 
@@ -298,6 +344,15 @@ class Test_show(unittest.TestCase):
             st = f.getvalue()
             self.assertEqual(msg, st)
 
+    def test_new_show_no_exist_class(self):
+        """  Test for show non-existent class """
+        msg = "** class doesn't exist **\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            pre_cmd = HBNBCommand().precmd("MyModel.show()")
+            HBNBCommand().onecmd("show MyModel")
+            st = f.getvalue()
+            self.assertEqual(msg, st)
+
     def test_show_no_id(self):
         """  Test for show with id missing """
         msg = "** instance id missing **\n"
@@ -306,6 +361,18 @@ class Test_show(unittest.TestCase):
         for i in classes:
             with patch('sys.stdout', new=io.StringIO()) as f:
                 HBNBCommand().onecmd("show " + i)
+                st = f.getvalue()
+                self.assertEqual(msg, st)
+
+    def test_new_show_no_id(self):
+        """  Test for show with id missing """
+        msg = "** instance id missing **\n"
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                pre_cmd = HBNBCommand().precmd(i + ".show()")
+                HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
                 self.assertEqual(msg, st)
 
@@ -320,6 +387,18 @@ class Test_show(unittest.TestCase):
                 st = f.getvalue()
                 self.assertEqual(msg, st)
 
+    def test_new_show_no_existent_id(self):
+        """  Test for show with non-existent id """
+        msg = "** no instance found **\n"
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                pre_cmd = HBNBCommand().precmd(i + ".show(123)")
+                HBNBCommand().onecmd(pre_cmd)
+                st = f.getvalue()
+                self.assertEqual(msg, st)
+
     def test_show_existing_id(self):
         """  Test for show with existing id  """
         classes = ["BaseModel", "User", "State", "City",
@@ -330,6 +409,22 @@ class Test_show(unittest.TestCase):
                 id_st = f.getvalue()
             with patch('sys.stdout', new=io.StringIO()) as f:
                 HBNBCommand().onecmd("show " + i + " " + id_st)
+                st = f.getvalue()
+                alldic = storage.all()
+                objst = str(alldic[i + '.' + id_st[:-1]])
+                self.assertEqual(st[:-1], objst)
+
+    def test_show_show_existing_id(self):
+        """  Test for show with existing id  """
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("create " + i)
+                id_st = f.getvalue()
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                pre_cmd = HBNBCommand().precmd(i + ".show(\"" + id_st + "\")")
+                HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
                 alldic = storage.all()
                 objst = str(alldic[i + '.' + id_st[:-1]])
@@ -363,6 +458,15 @@ class Test_all(unittest.TestCase):
             st = f.getvalue()
             self.assertEqual(msg, st)
 
+    def test_new_update_no_existent_class(self):
+        """  Test for all with no existent class """
+        msg = "** class doesn't exist **\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            pre_cmd = HBNBCommand().precmd("MyModel.all()")
+            HBNBCommand().onecmd(pre_cmd)
+            st = f.getvalue()
+            self.assertEqual(msg, st)
+
     def test_empty(self):
         """ Tests for empty storage """
         classes = ["BaseModel", "User", "State", "City",
@@ -375,6 +479,22 @@ class Test_all(unittest.TestCase):
         for i in classes:
             with patch('sys.stdout', new=io.StringIO()) as f:
                 HBNBCommand().onecmd("all " + i)
+                st = f.getvalue()
+                self.assertEqual(msg, st)
+
+    def test_new_empty(self):
+        """ Tests for empty storage """
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        msg = "[]\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("all()")
+                st = f.getvalue()
+                self.assertEqual(msg, st)
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                pre_cmd = HBNBCommand().precmd(i + ".all()")
+                HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
                 self.assertEqual(msg, st)
 
@@ -438,6 +558,15 @@ class Test_update(unittest.TestCase):
             st = f.getvalue()
             self.assertEqual(msg, st)
 
+    def test_new_update_no_existent_class(self):
+        """  Test for update with no existent class """
+        msg = "** class doesn't exist **\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            pre_cmd = HBNBCommand().precmd("MyModel.update()")
+            HBNBCommand().onecmd(pre_cmd)
+            st = f.getvalue()
+            self.assertEqual(msg, st)
+
     def test_update_no_id(self):
         """  Test for update with id missing """
         msg = "** instance id missing **\n"
@@ -446,6 +575,18 @@ class Test_update(unittest.TestCase):
         for i in classes:
             with patch('sys.stdout', new=io.StringIO()) as f:
                 HBNBCommand().onecmd("update " + i)
+                st = f.getvalue()
+                self.assertEqual(msg, st)
+
+    def test_new_update_no_id(self):
+        """  Test for update with id missing """
+        msg = "** instance id missing **\n"
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                pre_cmd = HBNBCommand().precmd(i + ".update()")
+                HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
                 self.assertEqual(msg, st)
 

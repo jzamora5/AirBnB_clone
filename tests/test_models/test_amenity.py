@@ -9,7 +9,7 @@ from models.amenity import Amenity
 from os import path, remove
 import unittest
 from unittest.mock import patch
-
+from time import sleep
 
 class Test_instanceState(unittest.TestCase):
 
@@ -275,6 +275,7 @@ class Test_saveAmenity(unittest.TestCase):
         b1 = Amenity()
         crtime = b1.created_at
         uptime = b1.updated_at
+        sleep(0.05)
         b1.save()
         self.assertFalse(uptime == b1.updated_at)
         self.assertTrue(crtime == b1.created_at)
@@ -285,6 +286,7 @@ class Test_saveAmenity(unittest.TestCase):
         b1 = Amenity()
         b1.save()
         self.assertEqual(type(b1.updated_at), datetime)
+        self.assertEqual(type(b1.created_at), datetime)
 
 
 class Test_to_dictAmenity(unittest.TestCase):

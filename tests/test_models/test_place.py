@@ -9,6 +9,7 @@ from models.place import Place
 from os import path, remove
 import unittest
 from unittest.mock import patch
+from time import sleep
 
 
 class Test_instancePlace(unittest.TestCase):
@@ -289,6 +290,7 @@ class Test_savePlace(unittest.TestCase):
         b1 = Place()
         crtime = b1.created_at
         uptime = b1.updated_at
+        sleep(0.05)
         b1.save()
         self.assertFalse(uptime == b1.updated_at)
         self.assertTrue(crtime == b1.created_at)
@@ -299,6 +301,7 @@ class Test_savePlace(unittest.TestCase):
         b1 = Place()
         b1.save()
         self.assertEqual(type(b1.updated_at), datetime)
+        self.assertEqual(type(b1.created_at), datetime)
 
 
 class Test_to_dictPlace(unittest.TestCase):

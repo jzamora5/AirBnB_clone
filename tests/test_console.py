@@ -208,10 +208,7 @@ class Test_destroy(unittest.TestCase):
             pre_cmd = HBNBCommand().precmd("MyModel.destroy()")
             HBNBCommand().onecmd(pre_cmd)
             st = f.getvalue()
-            if st[0] == '\n':
-                self.assertEqual('\n' + msg, st)
-            else:
-                self.assertEqual(msg, st)
+            self.assertEqual(msg, st)
 
     def test_destroy_invalid_class(self):
         """  Test for destroy with invalid class """
@@ -500,10 +497,7 @@ class Test_all(unittest.TestCase):
                 pre_cmd = HBNBCommand().precmd(i + ".all()")
                 HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
-                if st[0] == '\n':
-                    self.assertEqual('\n' + msg, st)
-                else:
-                    self.assertEqual(msg, st)
+                self.assertEqual(msg, st)
 
     def test_all_classes(self):
         """ Tests All command for classes_double """

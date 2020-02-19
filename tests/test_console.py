@@ -113,9 +113,17 @@ class Test_help(unittest.TestCase):
     def test_help_update(self):
         """  Test for help of update command """
         msg = "Usage: update <class name> <id> <attribute name> " \
-              "\"<attribute value>\"\n"
+              "<attribute value>\n"
         with patch('sys.stdout', new=io.StringIO()) as f:
             HBNBCommand().onecmd("help update")
+            st = f.getvalue()
+            self.assertEqual(msg, st)
+
+    def test_help_count(self):
+        """  Test for help of count command """
+        msg = "Usage: count <class name> or <class name>.count()\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("help count")
             st = f.getvalue()
             self.assertEqual(msg, st)
 
@@ -205,6 +213,7 @@ class Test_destroy(unittest.TestCase):
     def test_destroy_invalid_class(self):
         """  Test for destroy with invalid class """
         msg = "** class doesn't exist **\n"
+
         with patch('sys.stdout', new=io.StringIO()) as f:
             HBNBCommand().onecmd("destroy MyModel")
             st = f.getvalue()
@@ -327,6 +336,74 @@ class Test_show(unittest.TestCase):
                 self.assertEqual(st[:-1], objst)
 
 
+class Test_all(unittest.TestCase):
+
+    """ Tests the all command """
+
+    def setUp(self):
+        """ Set up for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+        FileStorage._FileStorage__objects = {}
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+
+    def test_update_no_existent_class(self):
+        """  Test for all with no existent class """
+        msg = "** class doesn't exist **\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("all MyModel")
+            st = f.getvalue()
+            self.assertEqual(msg, st)
+
+    def test_empty(self):
+        """ Tests for empty storage """
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        msg = "[]\n"
+        with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("all")
+                st = f.getvalue()
+                self.assertEqual(msg, st)
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("all " + i)
+                st = f.getvalue()
+                self.assertEqual(msg, st)
+
+    def test_all_classes(self):
+        """ Tests All command for classes_double """
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        classes += classes
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("create " + i)
+                st = f.getvalue()
+            alldic = storage.all()
+            all_cl = []
+            all_full = []
+            for j in alldic.keys():
+                    all_full.append(str(alldic[j]))
+                    if i in j:
+                        all_cl.append(str(alldic[j]))
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("all " + i)
+                st = f.getvalue()
+                self.assertEqual(str(all_cl) + "\n", st)
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("all")
+                st = f.getvalue()
+                self.assertEqual(str(all_full) + "\n", st)
+
+
 class Test_update(unittest.TestCase):
 
     """ Tests the update commands """
@@ -411,8 +488,35 @@ class Test_update(unittest.TestCase):
                 st = f.getvalue()
                 self.assertEqual(msg, st)
 
+    def test_update_extra_args(self):
+        """  Test for update with BaseModel """
+        classes = ["BaseModel", "User", "State", "City",
+                   "Amenity", "Place", "Review"]
+        attr = ["name", "code"]
+        value = ["Holberton", "123"]
+        typeval = [str, str]
+
+        for i in classes:
+            with patch('sys.stdout', new=io.StringIO()) as f:
+                HBNBCommand().onecmd("create " + i)
+                id_st = f.getvalue()
+                alldic = storage.all()
+                self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
+                for j, k in zip(attr, value):
+                    with patch('sys.stdout', new=io.StringIO()) as f:
+                        HBNBCommand().onecmd("update " + i + " " + id_st +
+                                             " " + j + " " + "\"" + k + "\"" +
+                                             "Hey_name \"Betty\"")
+                alldic = storage.all()
+                ins = alldic[i + '.' + id_st[:-1]]
+                for j, k, m in zip(attr, value, typeval):
+                    gattr = getattr(ins, j, False)
+                    self.assertEqual(gattr, k)
+                    self.assertEqual(m, type(gattr))
+                self.assertFalse(getattr(ins, "Hey_name", False))
+
     def test_update_BaseModel(self):
-        """  Test for update with BaseModel  """
+        """  Test for update with BaseModel """
         i = "BaseModel"
         attr = ["name", "code"]
         value = ["Holberton", "123"]
@@ -432,3 +536,157 @@ class Test_update(unittest.TestCase):
             gattr = getattr(ins, j, False)
             self.assertEqual(gattr, k)
             self.assertEqual(m, type(gattr))
+
+    def test_update_User(self):
+        """  Test for update with User """
+        i = "User"
+        attr = ["name", "code", "email", "password", "first_name", "last_name"]
+        value = ["Holberton", "123", "ga@gmail.com", "pswd", "Larry", "Page"]
+        typeval = [str, str, str, str, str, str]
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("create " + i)
+            id_st = f.getvalue()
+            alldic = storage.all()
+            self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
+        for j, k in zip(attr, value):
+                with patch('sys.stdout', new=io.StringIO()) as f:
+                    HBNBCommand().onecmd("update " + i + " " + id_st +
+                                         " " + j + " " + k)
+        alldic = storage.all()
+        ins = alldic[i + '.' + id_st[:-1]]
+        for j, k, m in zip(attr, value, typeval):
+            gattr = getattr(ins, j, False)
+            self.assertEqual(gattr, k)
+            self.assertEqual(m, type(gattr))
+
+    def test_update_State(self):
+        """  Test for update with State """
+        i = "State"
+        attr = ["name", "code"]
+        value = ["Holberton", "123"]
+        typeval = [str, str]
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("create " + i)
+            id_st = f.getvalue()
+            alldic = storage.all()
+            self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
+        for j, k in zip(attr, value):
+                with patch('sys.stdout', new=io.StringIO()) as f:
+                    HBNBCommand().onecmd("update " + i + " " + id_st +
+                                         " " + j + " " + k)
+        alldic = storage.all()
+        ins = alldic[i + '.' + id_st[:-1]]
+        for j, k, m in zip(attr, value, typeval):
+            gattr = getattr(ins, j, False)
+            self.assertEqual(gattr, k)
+            self.assertEqual(m, type(gattr))
+
+    def test_update_City(self):
+        """  Test for update with City """
+        i = "City"
+        attr = ["state_id", "name", "code"]
+        value = ["568", "Holberton", "123"]
+        typeval = [str, str, str]
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("create " + i)
+            id_st = f.getvalue()
+            alldic = storage.all()
+            self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
+        for j, k in zip(attr, value):
+                with patch('sys.stdout', new=io.StringIO()) as f:
+                    HBNBCommand().onecmd("update " + i + " " + id_st +
+                                         " " + j + " " + k)
+        alldic = storage.all()
+        ins = alldic[i + '.' + id_st[:-1]]
+        for j, k, m in zip(attr, value, typeval):
+            gattr = getattr(ins, j, False)
+            self.assertEqual(gattr, k)
+            self.assertEqual(m, type(gattr))
+
+    def test_update_Amenity(self):
+        """  Test for update with Amenity """
+        i = "Amenity"
+        attr = ["name", "code"]
+        value = ["Holberton", "123"]
+        typeval = [str, str]
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("create " + i)
+            id_st = f.getvalue()
+            alldic = storage.all()
+            self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
+        for j, k in zip(attr, value):
+                with patch('sys.stdout', new=io.StringIO()) as f:
+                    HBNBCommand().onecmd("update " + i + " " + id_st +
+                                         " " + j + " " + k)
+        alldic = storage.all()
+        ins = alldic[i + '.' + id_st[:-1]]
+        for j, k, m in zip(attr, value, typeval):
+            gattr = getattr(ins, j, False)
+            self.assertEqual(gattr, k)
+            self.assertEqual(m, type(gattr))
+
+    def test_update_Place(self):
+        """  Test for update with Place """
+        i = "Place"
+        attr = ["city_id", "user_id", "name", "description", "number_rooms",
+                "number_bathrooms", "max_guest", "price_by_night", "latitude",
+                "longitude", "code"]
+        value = ["686", "123", "Larry", "Nice", 5, 2, 15, 136,
+                 8.7, 9.4, "988"]
+        typeval = [str, str, str, str, int, int, int, int, float, float, str]
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("create " + i)
+            id_st = f.getvalue()
+            alldic = storage.all()
+            self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
+        for j, k in zip(attr, value):
+                with patch('sys.stdout', new=io.StringIO()) as f:
+                    HBNBCommand().onecmd("update " + i + " " + id_st +
+                                         " " + j + " " + str(k))
+        alldic = storage.all()
+        ins = alldic[i + '.' + id_st[:-1]]
+        for j, k, m in zip(attr, value, typeval):
+            gattr = getattr(ins, j, False)
+            self.assertEqual(gattr, k)
+            self.assertEqual(m, type(gattr))
+
+    def test_update_Review(self):
+        """  Test for update with Review """
+        i = "Review"
+        attr = ["place_id", "user_id", "text", "name", "code"]
+        value = ["985", "7621", "Random Text", "Holberton", "123"]
+        typeval = [str, str]
+        with patch('sys.stdout', new=io.StringIO()) as f:
+            HBNBCommand().onecmd("create " + i)
+            id_st = f.getvalue()
+            alldic = storage.all()
+            self.assertTrue((i + '.' + id_st[:-1]) in alldic.keys())
+        for j, k in zip(attr, value):
+                with patch('sys.stdout', new=io.StringIO()) as f:
+                    HBNBCommand().onecmd("update " + i + " " + id_st +
+                                         " " + j + " " + k)
+        alldic = storage.all()
+        ins = alldic[i + '.' + id_st[:-1]]
+        for j, k, m in zip(attr, value, typeval):
+            gattr = getattr(ins, j, False)
+            self.assertEqual(gattr, k)
+            self.assertEqual(m, type(gattr))
+
+
+class Test_count(unittest.TestCase):
+
+    """ Tests the update commands """
+    def setUp(self):
+        """ Set up for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass
+        FileStorage._FileStorage__objects = {}
+
+    def tearDown(self):
+        """ Tear down for all methods """
+        try:
+            remove("file.json")
+        except:
+            pass

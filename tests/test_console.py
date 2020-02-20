@@ -243,7 +243,7 @@ class Test_destroy(unittest.TestCase):
                 HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
                 if st[0] == "\n":
-                    st = st[1:]
+                    msg = "\n" + msg
                 self.assertEqual(msg, st)
 
     def test_destroy_no_existent_id(self):
@@ -268,7 +268,7 @@ class Test_destroy(unittest.TestCase):
                 HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
                 if st[0] == "\n":
-                    st = st[1:]
+                    msg = "\n" + msg
                 self.assertEqual(msg, st)
 
     def test_destroy_valid_class(self):
@@ -361,7 +361,7 @@ class Test_show(unittest.TestCase):
                 HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
                 if st[0] == "\n":
-                    st = st[1:]
+                    msg = "\n" + msg
                 self.assertEqual(msg, st)
 
     def test_show_no_existent_id(self):
@@ -386,7 +386,7 @@ class Test_show(unittest.TestCase):
                 HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
                 if st[0] == "\n":
-                    st = st[1:]
+                    msg = "\n" + msg
                 self.assertEqual(msg, st)
 
     def test_show_existing_id(self):
@@ -416,8 +416,6 @@ class Test_show(unittest.TestCase):
                 pre_cmd = HBNBCommand().precmd(i + ".show(\"" + id_st + "\")")
                 HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
-                if st[0] == "\n":
-                    st = st[1:]
                 alldic = storage.all()
                 objst = str(alldic[i + '.' + id_st[:-1]])
                 self.assertEqual(st[:-1], objst)
@@ -491,7 +489,7 @@ class Test_all(unittest.TestCase):
                 HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
                 if st[0] == "\n":
-                    st = st[1:]
+                    msg = "\n" + msg
                 self.assertEqual(msg, st)
 
     def test_all_classes(self):
@@ -587,7 +585,7 @@ class Test_update(unittest.TestCase):
                 HBNBCommand().onecmd(pre_cmd)
                 st = f.getvalue()
                 if st[0] == "\n":
-                    st = st[1:]
+                    msg = "\n" + msg
                 self.assertEqual(msg, st)
 
     def test_update_no_existent_id(self):

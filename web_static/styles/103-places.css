@@ -13,7 +13,7 @@ article {
     width: 390px;
     padding: 20px;
     margin: 20px 20px 20px 20px;
-    border: 1px solid #FF5A5F;
+    border: 1px solid #AA0004;
     border-radius: 4px;
     position: relative;
     z-index: -1;
@@ -29,12 +29,11 @@ article>h2 {
 }
 
 .price_by_night {
-    color: #FF5A5F;
-    border: 4px solid #FF5A5F;
+    color: #AA0004;
+    border: 4px solid #AA0004;
     border-radius: 100%;
     min-width: 60px;
     height: 60px;
-    font-size: 30px;
     position: absolute;
     display: flex;
     justify-content: center;
@@ -43,10 +42,15 @@ article>h2 {
     right: 7%;
 }
 
+.price_by_night h3 {
+    font-weight: 100;
+    font-size: 30px;
+}
+
 .information {
     height: 80px;
-    border-top: 1px solid #DDDDDD;
-    border-bottom: 1px solid #DDDDDD;
+    border-top: 1px solid #575757;
+    border-bottom: 1px solid #575757;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -57,8 +61,12 @@ article>h2 {
     width: 100px;
     height: 100px;
     background-position: center top;
-    line-height: 9em;
+    line-height: 6em;
     text-align: center;
+}
+.max_guest h3, .number_rooms h3, .number_bathrooms h3 {
+    font-weight: 100;
+    font-size: 16px;
 }
 
 .max_guest {
@@ -80,7 +88,7 @@ article>h2 {
 .places .amenities h2 {
     padding: 5% 0 5% 0;
     padding-bottom: 2%;
-    border-bottom: 1px solid #DDDDDD;
+    border-bottom: 1px solid #575757;
 }
 
 .places .amenities>ul {
@@ -161,7 +169,6 @@ article>h2 {
         display: flex;
         justify-content: center;
         margin: 0 auto 5% auto;
-
     }
 }
 @media only screen and (max-width: 281px) 
@@ -171,6 +178,13 @@ article>h2 {
     }
     .reviews {
         margin-bottom: 100%;
+    }
+}
+
+@media only screen and (max-width: 221px) 
+{
+    .information {
+      height: 20%;
     }
 }
 
